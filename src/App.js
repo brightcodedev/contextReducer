@@ -1,5 +1,4 @@
 import React, { useReducer, useContext, createContext, useState } from 'react';
-import { findAllByDisplayValue } from '@testing-library/react';
 
 const reducer=(state, action)=>{
   switch(action.type){
@@ -28,11 +27,24 @@ function Counter(){
         <button onClick={()=>dispatch({ type: 'DECREMENT' })}>-</button>
         <button onClick={()=>dispatch({ type: 'RESET' })}>reset</button>
         <br />
-        <input onChange={(e)=>setCountInput(Number(e.target.value))} placeholder="Give me an incrementor" />
+        <input type="number" onChange={(e)=>setCountInput(Number(e.target.value))} placeholder="Give me an incrementor" />
         <button onClick={()=>dispatch({ type: 'INCREMENTBYCUSTOM', payload: countInput })}>Increment Now!</button>
-
       </>
     )
+}
+
+const UnrelatedCompContainer=()=>{
+  return <UnrelatedComp />
+}
+
+const UnrelatedComp=()=>{
+  const [state, dispatch] = useContext(CountContext);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={()=>dispatch({ type: 'INCREMENT' })}>+</button>
+    </>
+  )
 }
 
 function App() {
@@ -40,6 +52,8 @@ function App() {
   return (
     <CountContext.Provider value={stateDispatchObj}>
       <Counter />
+      <hr />
+      <UnrelatedCompContainer />
     </CountContext.Provider>
 
   );
